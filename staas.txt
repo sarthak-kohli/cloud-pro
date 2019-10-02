@@ -1,0 +1,32 @@
+cloud-project //staas(storage as a service) through lvm & nfs
+import cgi
+form=cgi.FieldStorage
+name=form.getvalue('n')
+size=form.getvalue('s')
+cmd="lvcreate --size{} --name {} vgcloud".format(size,name)
+if sp.getstatusoutput(cmd)[0]==0:
+	print("storage created")
+		sp.getstatusoutput(cmd.format[0]==0)
+else
+	print("error")
+cmd1="mkfs.ext4 /dev/vgcloud{}".format(name)
+cm="mkdir /cloud/{}".format()
+
+if sp.getstatusoutput(cmdformat)[0]==0:
+	print("storage formatted")
+else	
+	print("error in format")
+
+	cmdir="mkdir /cloud/{}".format(name)
+cmk="sudo mount /dev/vgcloud{0}/cloud{0}".format(name)
+
+share="/coud/vimal *(rw,no_root_squash)".format(name)
+fh=open("/etc/exports",'a')
+fh.write(share)
+fh.close
+
+sd="sudo exportfs -r"
+if sp.getstatusoutput[cmdfs][0]==0:
+	print("nfs shared updated")'
+else
+	print("error in nfs")

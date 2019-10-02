@@ -1,0 +1,43 @@
+//cloud-project
+//saas-software as a service in a docker container
+
+docker run -it --name x1 -v /root/Desktop/xpra_rpm/:/xpra -v /root/Desktop/rhel7.5_rpm_extra/:/extra -v /run/media-dvd64/:/dvd  centos:latest
+rm -rf /etc/yum.repos.d/*.repos
+
+cd /etc/yum.repos.d/
+
+yum repolist
+
+[dvd]
+baseurl=file:///dvd
+gpgcheck=0
+
+[extras]
+baseurl=file:///extras
+gpgcheck=0
+
+[extra]
+baseurl=file:///xpra
+gpgcheck=0
+
+yum install firefox openssh-server
+[configuring openssh-server]
+vi /etc/ssh/sshd_config
+
+x11UseLocalhost no
+sshd-keygen
+passwd root
+
+/usr/sbin/sshd -f /etc/ssh/sshd_config
+vi /root/.bashrc
+dbus -uuidgen > /etc/machine-id
+
+yum install net-tools
+netstat -tnlp
+yum install xpra //used for graphics
+yum install python-websockify
+xpra start --bind-tcp=0.0.0.0:3333 --html=on --start-child=firefox --systemd-run=no
+
+vi /root/.bahrc
+docker commit x1 xpra_firefox:v1
+docker run -dit -p 1111:3333 --name vimalxpra xpra_firefox:v1
